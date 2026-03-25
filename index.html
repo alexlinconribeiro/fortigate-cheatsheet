@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FortiGate — Cheat Sheet de Comandos</title>
+<style>
+:root {
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Menlo', 'DejaVu Sans Mono', monospace;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Ubuntu, sans-serif;
+  --bg: #1a1a1a;
+  --bg2: #232323;
+  --bg3: #2c2c2c;
+  --border: #3a3a3a;
+  --green: #4CAF50;
+  --green2: #81C784;
+  --green-dim: #2e7d32;
+  --orange: #FF9800;
+  --orange2: #FFB74D;
+  --red: #F44336;
+  --red2: #EF9A9A;
+  --cyan: #00BCD4;
+  --cyan2: #80DEEA;
+  --purple: #CE93D8;
+  --blue: #64B5F6;
+  --yellow2: #FFF176;
+  --text: #E0E0E0;
+  --text2: #BDBDBD;
+  --text3: #9E9E9E;
+  --nav-h: 56px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-mono);font-size:14px;line-height:1.6}
+header{
+  background: linear-gradient(135deg, #0d1117 0%, #132238 45%, #0f2027 100%);
+  border-bottom: 2px solid var(--green-dim);
+  padding: 48px 24px 40px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(76,175,80,.03) 24px,rgba(76,175,80,.03) 25px)}
+.header-badge{display:inline-block;background:var(--green-dim);color:var(--green2);font-size:11px;padding:3px 12px;border-radius:2px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;border:1px solid var(--green)}
+header h1{font-size:clamp(28px,5vw,52px);font-weight:700;color:var(--green);letter-spacing:-1px;line-height:1.1;margin-bottom:8px}
+header h1 span{color:var(--text3);font-weight:300}
+header .subtitle{font-size:13px;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:28px}
+.stats-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.stat{background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.25);border-radius:4px;padding:8px 18px;text-align:center}
+.stat .val{display:block;font-size:20px;font-weight:700;color:var(--green);line-height:1}
+.stat .lbl{display:block;font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.compat{background:#161616;border-bottom:1px solid #2a2a2a;padding:10px 20px;text-align:center;font-size:11px;color:#666;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.compat span.tag{background:#1e2e1e;border:1px solid #2e7d32;color:#81C784;padding:2px 10px;border-radius:4px}
+nav{position:sticky;top:0;z-index:50;background:#0d1117;border-bottom:2px solid var(--green-dim);height:var(--nav-h);display:flex;align-items:center;overflow-x:auto;padding:0 16px;gap:2px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav .brand{font-size:13px;color:var(--green);font-weight:700;padding-right:16px;border-right:1px solid #4a4a4a;margin-right:8px;white-space:nowrap;flex-shrink:0}
+nav a{color:var(--text3);text-decoration:none;font-size:11px;padding:6px 10px;border-radius:3px;transition:.2s;white-space:nowrap;border:1px solid transparent}
+nav a:hover{background:rgba(76,175,80,.1);border-color:rgba(76,175,80,.3);color:var(--green2)}
+nav a.basic{color:var(--green2)} nav a.inter{color:var(--orange2)} nav a.adv{color:var(--red2)} nav a.exp{color:var(--purple)}
+main{max-width:1400px;margin:0 auto;padding:32px 16px 80px}
+.section{margin-bottom:48px;scroll-margin-top:calc(var(--nav-h) + 16px)}
+.section-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.section-num{width:44px;height:44px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.basic .section-num{background:rgba(76,175,80,.15);color:var(--green);border:1px solid var(--green-dim)}
+.inter .section-num{background:rgba(255,152,0,.15);color:var(--orange);border:1px solid #e65100}
+.adv .section-num{background:rgba(244,67,54,.15);color:var(--red);border:1px solid #b71c1c}
+.exp .section-num{background:rgba(206,147,216,.15);color:var(--purple);border:1px solid #6a1b9a}
+.section-title{flex:1}
+.section-title h2{font-size:clamp(16px,2.5vw,22px);font-weight:700;line-height:1.2}
+.basic .section-title h2{color:var(--green)} .inter .section-title h2{color:var(--orange)} .adv .section-title h2{color:var(--red)} .exp .section-title h2{color:var(--purple)}
+.section-title .pct{font-size:11px;color:var(--text3);letter-spacing:1px}
+.level-tag{font-size:10px;padding:3px 8px;border-radius:2px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0}
+.basic .level-tag{background:rgba(76,175,80,.15);color:var(--green2);border:1px solid var(--green-dim)}
+.inter .level-tag{background:rgba(255,152,0,.15);color:var(--orange2);border:1px solid #e65100}
+.adv .level-tag{background:rgba(244,67,54,.15);color:var(--red2);border:1px solid #b71c1c}
+.exp .level-tag{background:rgba(206,147,216,.15);color:var(--purple);border:1px solid #6a1b9a}
+.grid{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr))}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.card-header{background:var(--bg3);padding:10px 16px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}.dot-green{background:var(--green);box-shadow:0 0 6px var(--green)} .dot-orange{background:var(--orange);box-shadow:0 0 6px var(--orange)} .dot-red{background:var(--red);box-shadow:0 0 6px var(--red)} .dot-purple{background:var(--purple);box-shadow:0 0 6px var(--purple)} .dot-cyan{background:var(--cyan);box-shadow:0 0 6px var(--cyan)} .dot-blue{background:var(--blue);box-shadow:0 0 6px var(--blue)}
+.card-body{padding:16px}
+.term{background:#0d1117;border:1px solid #2a3540;border-radius:5px;overflow:hidden;margin:8px 0;font-size:13px}
+.term-bar{background:#1c2533;padding:6px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #2a3540}
+.term-bar .dot-close,.term-bar .dot-min,.term-bar .dot-max{width:10px;height:10px;border-radius:50%}.term-bar .dot-close{background:#ff5f56}.term-bar .dot-min{background:#ffbd2e}.term-bar .dot-max{background:#27c93f}.term-bar .term-title{font-size:11px;color:var(--text3);margin-left:8px}
+.term-body{padding:12px 16px;line-height:1.8}
+.term-body .p{color:var(--green)} .term-body .cmd{color:var(--text)} .term-body .arg{color:var(--cyan2)} .term-body .flag{color:var(--yellow2)} .term-body .out{color:var(--text3)} .term-body .cmt{color:#4a5568;font-style:italic} .term-body .file{color:var(--orange2)} .term-body .dir{color:var(--blue)} .term-body .err{color:var(--red2)} .term-body .ok{color:var(--green2)} .term-body .str{color:var(--green2)} .term-body .num{color:var(--purple)} .term-body .kw{color:var(--orange)}
+.tbl-wrap{overflow-x:auto} table{width:100%;border-collapse:collapse;font-size:12.5px} th{background:var(--bg3);color:var(--text2);padding:8px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #4a4a4a} td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top} tr:last-child td{border-bottom:none} tr:hover td{background:rgba(255,255,255,.02)} td:first-child{font-family:var(--font-mono);color:var(--cyan2);white-space:nowrap}
+code{font-family:var(--font-mono);background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.2);border-radius:3px;padding:1px 5px;font-size:12px;color:var(--green2)}
+ul.ref{list-style:none;padding:0} ul.ref li{padding:5px 0 5px 20px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--text2)} ul.ref li:last-child{border-bottom:none} ul.ref li::before{content:'▸';position:absolute;left:0;color:var(--green)} ul.ref li strong{color:var(--text)}
+.callout{border-left:3px solid;padding:10px 14px;border-radius:0 4px 4px 0;margin:12px 0;font-size:12.5px}.warn{border-color:var(--orange);background:rgba(255,152,0,.06);color:var(--orange2)} .tip{border-color:var(--green);background:rgba(76,175,80,.06);color:var(--green2)} .info{border-color:var(--cyan);background:rgba(0,188,212,.06);color:var(--cyan2)} .danger{border-color:var(--red);background:rgba(244,67,54,.06);color:var(--red2)} .callout strong{display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+footer{background:#0d1117;border-top:1px solid var(--border);padding:24px;text-align:center;font-size:12px;color:var(--text3)} footer .brand{color:var(--green);font-weight:700}
+@media (max-width:768px){.grid-2{grid-template-columns:1fr} header{padding:28px 14px 24px} nav{padding:0 8px;height:auto;min-height:48px} nav .brand{font-size:11px;padding-right:8px;margin-right:4px} nav a{font-size:9px;padding:5px 7px} main{padding:20px 12px 48px} .section-header{flex-wrap:wrap;gap:8px} .term-body{font-size:11.5px;padding:10px 12px} }
+@media (max-width:480px){header h1{font-size:20px} nav .brand{display:none} main{padding:16px 10px 48px} th{font-size:9px;padding:6px 8px} td{font-size:11px;padding:6px 8px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-badge">FortiGate · CLI Cheat Sheet · Network & Security</div>
+  <h1><span>#</span> FortiGate <span>--</span>commands</h1>
+  <div class="subtitle">Comandos úteis de operação · troubleshooting · segurança</div>
+  <div class="stats-bar">
+    <div class="stat"><span class="val">10</span><span class="lbl">Seções</span></div>
+    <div class="stat"><span class="val">150+</span><span class="lbl">Comandos</span></div>
+    <div class="stat"><span class="val">CLI</span><span class="lbl">FortiOS</span></div>
+    <div class="stat"><span class="val">L1-L7</span><span class="lbl">Cobertura</span></div>
+    <div class="stat"><span class="val">Ops</span><span class="lbl">Foco</span></div>
+  </div>
+</header>
+<div class="compat">
+  <span style="color:#4CAF50;font-weight:700;letter-spacing:.5px;">COMPATIBILIDADE:</span>
+  <span class="tag">FortiOS 6.4</span>
+  <span class="tag">FortiOS 7.0</span>
+  <span class="tag">FortiOS 7.2</span>
+  <span class="tag">FortiOS 7.4</span>
+  <span class="tag">CLI SSH / Console</span>
+</div>
+<nav>
+  <div class="brand"># FortiGate</div>
+  <a href="#s1" class="basic">01·Sistema</a>
+  <a href="#s2" class="basic">02·Interfaces</a>
+  <a href="#s3" class="inter">03·Rotas</a>
+  <a href="#s4" class="inter">04·Firewall</a>
+  <a href="#s5" class="inter">05·VPN</a>
+  <a href="#s6" class="adv">06·Logs</a>
+  <a href="#s7" class="adv">07·Debug</a>
+  <a href="#s8" class="adv">08·HA</a>
+  <a href="#s9" class="exp">09·Diagnose</a>
+  <a href="#s10" class="exp">10·Backup</a>
+</nav>
+<main>
+
+<div id="s1" class="section basic">
+  <div class="section-header"><div class="section-num">01</div><div class="section-title"><h2>Sistema & Informações Gerais</h2><div class="pct">Versão · status · admins · performance</div></div><div class="level-tag">Básico</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-green"></span>Status geral do equipamento</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">ssh admin@fortigate</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">get system status</span> <span class="cmt"># versão, build, serial, DBs</span></div>
+      <div><span class="p">#</span> <span class="cmd">get hardware status</span> <span class="cmt"># hardware e temperatura</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose hardware sysinfo vm full</span> <span class="cmt"># detalhes em VM</span></div>
+      <div><span class="p">#</span> <span class="cmd">get system performance status</span> <span class="cmt"># CPU, memória, sessões</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys top</span> <span class="cmt"># processos em tempo real</span></div>
+      <div><span class="p">#</span> <span class="cmd">get system uptime</span> <span class="cmt"># uptime do equipamento</span></div>
+      <div><span class="p">#</span> <span class="cmd">get system arp</span> <span class="cmt"># tabela ARP</span></div>
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-cyan"></span>Administração & configuração</div><div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>Comando</th><th>Uso</th></tr></thead><tbody>
+      <tr><td>show full-configuration</td><td>Exibe a configuração completa</td></tr>
+      <tr><td>show | grep &lt;texto&gt;</td><td>Busca rápida em config</td></tr>
+      <tr><td>config global</td><td>Entra no contexto global</td></tr>
+      <tr><td>get system admin list</td><td>Lista administradores</td></tr>
+      <tr><td>get system interface physical</td><td>Lista interfaces físicas</td></tr>
+      <tr><td>diagnose debug config-error-log read</td><td>Lê erros de configuração</td></tr>
+      <tr><td>execute time</td><td>Data e hora atuais</td></tr>
+      <tr><td>execute reboot</td><td>Reinicia o equipamento</td></tr>
+    </tbody></table></div>
+    <div class="callout info"><strong>Observação</strong> Em troubleshooting rápido, normalmente vale começar por <code>get system status</code>, <code>get system performance status</code> e <code>show system interface</code>.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s2" class="section basic">
+  <div class="section-header"><div class="section-num">02</div><div class="section-title"><h2>Interfaces, VLANs & Endereçamento</h2><div class="pct">IP · link · VLAN · DHCP</div></div><div class="level-tag">Básico</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-green"></span>Consulta de interfaces</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">interfaces</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">show system interface</span></div>
+      <div><span class="p">#</span> <span class="cmd">get system interface</span> <span class="arg">? </span></div>
+      <div><span class="p">#</span> <span class="cmd">get system interface physical</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose netlink interface list</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose ip address list</span></div>
+      <div><span class="p">#</span> <span class="cmd">get router info routing-table all</span> <span class="cmt"># checar redes diretamente conectadas</span></div>
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Exemplos de configuração</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">config system interface</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">config system interface</span></div>
+      <div>&nbsp;&nbsp;<span class="cmd">edit</span> <span class="str">"VLAN10-LAN"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set interface</span> <span class="str">"port2"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set vlanid</span> <span class="num">10</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set ip</span> <span class="arg">192.168.10.1 255.255.255.0</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set allowaccess</span> <span class="arg">ping https ssh</span></div>
+      <div>&nbsp;&nbsp;<span class="cmd">next</span></div>
+      <div><span class="cmd">end</span></div>
+    </div></div>
+    <div class="callout tip"><strong>Dica</strong> Em validação de link, combine <code>get system interface physical</code> com <code>diagnose netlink interface list</code> para ver speed/duplex e estado operacional.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s3" class="section inter">
+  <div class="section-header"><div class="section-num">03</div><div class="section-title"><h2>Rotas, Gateway & Routing</h2><div class="pct">Static route · policy route · lookup</div></div><div class="level-tag">Intermediário</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-cyan"></span>Tabela de roteamento</div><div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>Comando</th><th>Finalidade</th></tr></thead><tbody>
+      <tr><td>get router info routing-table all</td><td>Mostra a tabela completa</td></tr>
+      <tr><td>get router info routing-table static</td><td>Apenas rotas estáticas</td></tr>
+      <tr><td>get router info routing-table database</td><td>Banco de rotas</td></tr>
+      <tr><td>get router info routing-table details &lt;IP&gt;</td><td>Lookup detalhado para destino</td></tr>
+      <tr><td>show router static</td><td>Configuração de rotas estáticas</td></tr>
+      <tr><td>show router policy</td><td>Policy routes</td></tr>
+    </tbody></table></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Exemplo de rota estática</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">config router static</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">config router static</span></div>
+      <div>&nbsp;&nbsp;<span class="cmd">edit</span> <span class="num">1</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set dst</span> <span class="arg">0.0.0.0 0.0.0.0</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set gateway</span> <span class="arg">200.0.0.1</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set device</span> <span class="str">"port1"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set distance</span> <span class="num">10</span></div>
+      <div>&nbsp;&nbsp;<span class="cmd">next</span></div>
+      <div><span class="cmd">end</span></div>
+    </div></div>
+    <div class="callout warn"><strong>Atenção</strong> Quando houver mais de um link, valide distância, prioridade e se a rota está sendo realmente instalada. Configurada não significa ativa.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s4" class="section inter">
+  <div class="section-header"><div class="section-num">04</div><div class="section-title"><h2>Firewall Policies, NAT & Objetos</h2><div class="pct">Policies · addresses · services · VIP</div></div><div class="level-tag">Intermediário</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-green"></span>Políticas e objetos</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">policy review</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">show firewall policy</span></div>
+      <div><span class="p">#</span> <span class="cmd">show firewall address</span></div>
+      <div><span class="p">#</span> <span class="cmd">show firewall addrgrp</span></div>
+      <div><span class="p">#</span> <span class="cmd">show firewall service custom</span></div>
+      <div><span class="p">#</span> <span class="cmd">show firewall vip</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose firewall iprope list</span> <span class="cmt"># inspeciona policy engine</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session list</span> <span class="cmt"># sessões atuais</span></div>
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-red"></span>Exemplo policy + NAT</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">config firewall policy</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">config firewall policy</span></div>
+      <div>&nbsp;&nbsp;<span class="cmd">edit</span> <span class="num">0</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set name</span> <span class="str">"LAN-to-WAN"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set srcintf</span> <span class="str">"LAN"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set dstintf</span> <span class="str">"WAN1"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set srcaddr</span> <span class="str">"all"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set dstaddr</span> <span class="str">"all"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set service</span> <span class="str">"ALL"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set action</span> <span class="arg">accept</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set schedule</span> <span class="str">"always"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set nat</span> <span class="arg">enable</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmd">set logtraffic</span> <span class="arg">all</span></div>
+      <div>&nbsp;&nbsp;<span class="cmd">next</span></div>
+      <div><span class="cmd">end</span></div>
+    </div></div>
+    <div class="callout danger"><strong>Cuidado</strong> Em análise de publicação via VIP, não olhe só a policy. Valide VIP, rota de retorno, ARP/next-hop e se o serviço realmente está escutando no host interno.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s5" class="section inter">
+  <div class="section-header"><div class="section-num">05</div><div class="section-title"><h2>VPN IPsec & SSL-VPN</h2><div class="pct">Phase1 · Phase2 · túnel · usuários</div></div><div class="level-tag">Intermediário</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>IPsec</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">vpn ipsec</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">show vpn ipsec phase1-interface</span></div>
+      <div><span class="p">#</span> <span class="cmd">show vpn ipsec phase2-interface</span></div>
+      <div><span class="p">#</span> <span class="cmd">get vpn ipsec tunnel summary</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose vpn tunnel list</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose vpn ike gateway list</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose vpn ike log-filter clear</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose vpn ike log-filter name</span> <span class="str">"TUNEL-XYZ"</span></div>
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-cyan"></span>SSL VPN</div><div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>Comando</th><th>Uso</th></tr></thead><tbody>
+      <tr><td>show vpn ssl settings</td><td>Configuração geral da SSL VPN</td></tr>
+      <tr><td>show user local</td><td>Usuários locais</td></tr>
+      <tr><td>show user group</td><td>Grupos vinculados</td></tr>
+      <tr><td>diagnose vpn ssl list</td><td>Sessões SSL VPN ativas</td></tr>
+      <tr><td>get vpn ssl monitor</td><td>Monitor da SSL VPN</td></tr>
+    </tbody></table></div>
+    <div class="callout tip"><strong>Dica</strong> Em IPsec, valide na ordem: reachability, Phase1, Phase2, rotas, policy e retorno. Muitos incidentes fecham em policy ou seletor de Phase2.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s6" class="section adv">
+  <div class="section-header"><div class="section-num">06</div><div class="section-title"><h2>Logs, Sessions & Monitoramento</h2><div class="pct">Event log · traffic log · session table</div></div><div class="level-tag">Avançado</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-green"></span>Logs</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">log review</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">execute log filter category</span> <span class="arg">0</span></div>
+      <div><span class="p">#</span> <span class="cmd">execute log filter field</span> <span class="str">srcip 10.10.10.10</span></div>
+      <div><span class="p">#</span> <span class="cmd">execute log display</span></div>
+      <div><span class="p">#</span> <span class="cmd">execute log display | grep</span> <span class="str">policyid</span></div>
+      <div><span class="p">#</span> <span class="cmd">show log fortianalyzer setting</span></div>
+      <div><span class="p">#</span> <span class="cmd">show log syslogd setting</span></div>
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-red"></span>Sessões</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">session table</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session stat</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session list</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session filter src</span> <span class="arg">10.10.10.10</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session filter dst</span> <span class="arg">8.8.8.8</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session filter dport</span> <span class="arg">443</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session clear</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys session filter clear</span></div>
+    </div></div></div></div>
+  </div>
+</div>
+
+<div id="s7" class="section adv">
+  <div class="section-header"><div class="section-num">07</div><div class="section-title"><h2>Debug de Tráfego & Flow</h2><div class="pct">debug flow · sniffer · packets</div></div><div class="level-tag">Avançado</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Debug flow clássico</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">diagnose debug flow</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">diagnose debug reset</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose debug disable</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose debug flow filter addr</span> <span class="arg">10.10.10.10</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose debug flow filter port</span> <span class="arg">443</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose debug flow show function-name enable</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose debug flow trace start</span> <span class="num">100</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose debug enable</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose debug disable</span> <span class="cmt"># parar ao finalizar</span></div>
+    </div></div>
+    <div class="callout warn"><strong>Atenção</strong> Sempre limpe filtros no final para não deixar debug residual: <code>diagnose debug reset</code> e <code>diagnose debug disable</code>.</div>
+    </div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-blue"></span>Sniffer</div><div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>Comando</th><th>Uso</th></tr></thead><tbody>
+      <tr><td>diagnose sniffer packet any 'host 8.8.8.8' 4 0 l</td><td>Captura pacotes para host específico</td></tr>
+      <tr><td>diagnose sniffer packet any 'port 53' 4 0 l</td><td>Captura DNS</td></tr>
+      <tr><td>diagnose sniffer packet port1 'icmp' 4 0 a</td><td>Captura ICMP em interface específica</td></tr>
+      <tr><td>diagnose sniffer packet any 'host 10.0.0.1 and port 443' 6 0 a</td><td>Mais detalhado</td></tr>
+    </tbody></table></div>
+    <div class="callout info"><strong>Uso prático</strong> O sniffer mostra se o pacote entra e sai. O debug flow mostra por que ele foi aceito, NATeado, roteado ou dropado.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s8" class="section adv">
+  <div class="section-header"><div class="section-num">08</div><div class="section-title"><h2>HA, Cluster & Failover</h2><div class="pct">Status · sincronismo · prioridade</div></div><div class="level-tag">Avançado</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-red"></span>Checagem de HA</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">ha check</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">get system ha status</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys ha status</span></div>
+      <div><span class="p">#</span> <span class="cmd">show system ha</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys ha checksum cluster</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys ha checksum show</span></div>
+      <div><span class="p">#</span> <span class="cmd">execute ha failover set</span> <span class="arg">1</span> <span class="cmt"># usar com critério</span></div>
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-purple"></span>Pontos para validar</div><div class="card-body"><ul class="ref">
+      <li><strong>Role</strong> — quem está como primary e secondary</li>
+      <li><strong>Sync</strong> — estado de sincronismo da configuração</li>
+      <li><strong>Monitored interfaces</strong> — links que participam do failover</li>
+      <li><strong>Override / priority</strong> — comportamento esperado após retorno do link</li>
+      <li><strong>Session pickup</strong> — continuidade de sessões conforme cenário</li>
+    </ul>
+    <div class="callout danger"><strong>Boa prática</strong> Antes de qualquer failover manual, valide janela, impacto e se há tráfego crítico em produção.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s9" class="section exp">
+  <div class="section-header"><div class="section-num">09</div><div class="section-title"><h2>Diagnose Úteis de Campo</h2><div class="pct">ping · traceroute · DNS · link</div></div><div class="level-tag">Especialista</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-cyan"></span>Comandos rápidos</div><div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>Comando</th><th>Finalidade</th></tr></thead><tbody>
+      <tr><td>execute ping 8.8.8.8</td><td>Teste básico de reachability</td></tr>
+      <tr><td>execute ping-options source 192.168.1.1</td><td>Define IP de origem</td></tr>
+      <tr><td>execute ping-options interface port1</td><td>Força interface de saída</td></tr>
+      <tr><td>execute traceroute 8.8.8.8</td><td>Rota até o destino</td></tr>
+      <tr><td>execute nslookup openai.com</td><td>Valida resolução DNS</td></tr>
+      <tr><td>get system dns</td><td>Servidores DNS configurados</td></tr>
+      <tr><td>diagnose test application dnsproxy 6</td><td>Informação do DNS proxy</td></tr>
+      <tr><td>diagnose netlink brctl list</td><td>Estado de bridges, quando aplicável</td></tr>
+    </tbody></table></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-green"></span>Sequência de troubleshooting</div><div class="card-body"><ul class="ref">
+      <li><strong>1.</strong> Verifique status do sistema e consumo de recursos</li>
+      <li><strong>2.</strong> Valide interface, IP, gateway e tabela de rotas</li>
+      <li><strong>3.</strong> Teste reachability com ping/traceroute</li>
+      <li><strong>4.</strong> Revise policy, NAT, VIP e objetos</li>
+      <li><strong>5.</strong> Consulte sessões e logs</li>
+      <li><strong>6.</strong> Use sniffer e debug flow somente no alvo filtrado</li>
+    </ul>
+    <div class="callout tip"><strong>Dica prática</strong> Quando o teste é a partir do próprio firewall, use <code>execute ping-options source</code>. Isso evita conclusões erradas por origem inesperada.</div>
+    </div></div>
+  </div>
+</div>
+
+<div id="s10" class="section exp">
+  <div class="section-header"><div class="section-num">10</div><div class="section-title"><h2>Backup, Restore & Manutenção</h2><div class="pct">Backup config · firmware · revisão</div></div><div class="level-tag">Especialista</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-purple"></span>Backup e revisão</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">maintenance</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">execute backup config flash</span> <span class="file">backup.conf</span></div>
+      <div><span class="p">#</span> <span class="cmd">execute backup full-config flash</span> <span class="file">full-backup.conf</span></div>
+      <div><span class="p">#</span> <span class="cmd">execute restore config flash</span> <span class="file">backup.conf</span></div>
+      <div><span class="p">#</span> <span class="cmd">execute restore image tftp</span> <span class="arg">&lt;arquivo&gt; &lt;servidor&gt;</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose autoupdate versions</span></div>
+      <div><span class="p">#</span> <span class="cmd">get system firmware</span></div>
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Boas práticas</div><div class="card-body"><ul class="ref">
+      <li>Faça backup antes de qualquer mudança relevante</li>
+      <li>Documente o motivo da alteração e janela aplicada</li>
+      <li>Em upgrade, valide release notes, path suportado e uso de recursos</li>
+      <li>Após mudanças, teste tráfego real e monitore sessões/logs</li>
+    </ul>
+    <div class="callout warn"><strong>Importante</strong> Alguns comandos e comportamentos variam entre versões do FortiOS. Em ambiente crítico, valide a sintaxe no equipamento antes de executar.</div>
+    </div></div>
+  </div>
+</div>
+
+</main>
+<footer>
+  <div>Arquivo inspirado no modelo de cheat sheet enviado e adaptado para <span class="brand">FortiGate CLI</span>.</div>
+</footer>
+</body>
+</html>
