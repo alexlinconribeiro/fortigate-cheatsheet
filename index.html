@@ -126,6 +126,9 @@ footer{background:#0d1117;border-top:1px solid var(--border);padding:24px;text-a
   <a href="#s8" class="adv">08·HA</a>
   <a href="#s9" class="exp">09·Diagnose</a>
   <a href="#s10" class="exp">10·Backup</a>
+  <a href="#s11" class="exp">11·SD-Wan</a>
+  <a href="#s12" class="exp">12·BGP</a>
+  <a href="#s13" class="exp">13·OSPF</a>
 </nav>
 <main>
 
@@ -379,6 +382,102 @@ footer{background:#0d1117;border-top:1px solid var(--border);padding:24px;text-a
       <li>Documente o motivo da alteração e janela aplicada</li>
       <li>Em upgrade, valide release notes, path suportado e uso de recursos</li>
       <li>Após mudanças, teste tráfego real e monitore sessões/logs</li>
+    </ul>
+    <div class="callout warn"><strong>Importante</strong> Alguns comandos e comportamentos variam entre versões do FortiOS. Em ambiente crítico, valide a sintaxe no equipamento antes de executar.</div>
+    </div></div>
+  </div>
+</div>
+<div id="s11" class="section exp">
+  <div class="section-header"><div class="section-num">11</div><div class="section-title"><h2>SD-WAN</h2><div class="pct">Helth check</div></div><div class="level-tag">Especialista</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-purple"></span>Diagnostico</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">maintenance</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">diagnose sys sdwan health-check</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys sdwan service</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose sys sdwan member</span></div>
+      <div><span class="p">#</span> <span class="cmd">get router info routing-table all</span> </div>
+     
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Boas práticas</div><div class="card-body"><ul class="ref">
+      <li>Não confie só no status “UP” → valide se o SLA realmente detecta degradação (latência, jitter, perda</li>
+      <li>Sempre configure health-check com destino confiável (ex: 8.8.8.8 + outro IP)</li>
+      <li>Evite depender da implicit rule → crie regras explícitas por tipo de tráfeg</li>
+      <li>Revise prioridade/cost para evitar comportamento inesperado</li>
+	  <li>Após mudanças, limpe sessões para forçar reavaliação do caminho</li>
+	  <li>Sempre valide se existe rota estática competindo com SD-WAN</li>
+    </ul>
+    <div class="callout warn"><strong>Importante</strong> Alguns comandos e comportamentos variam entre versões do FortiOS. Em ambiente crítico, valide a sintaxe no equipamento antes de executar.</div>
+    </div></div>
+  </div>
+</div>
+<div id="s12" class="section exp">
+  <div class="section-header"><div class="section-num">12</div><div class="section-title"><h2>BGP</h2><div class="pct">Route, Neighbors</div></div><div class="level-tag">Especialista</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-purple"></span>Diagnostico</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">maintenance</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">get router info bgp summary</span> </div>
+      <div><span class="p">#</span> <span class="cmd">get router info bgp neighbors</span></div>
+      <div><span class="p">#</span> <span class="cmd">get router info routing-table bgp</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose ip router bgp</span> </div>
+	  <div><span class="p">#</span> <span class="cmd">diagnose ip router bgp level info</span> </div>
+     
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Boas práticas</div><div class="card-body"><ul class="ref">
+      <li>“BGP up” não significa sucesso → valide rotas recebidas e instaladas</li>
+      <li>Use sempre prefix-list e route-map controlados (evite full table sem filtro)</li>
+      <li>Padronize anúncios (ex: blocos /22 por filial, agregação)</li>
+      <li>Valide next-hop reachability (problema clássico)</li>
+	  <li>Em VPN/BGP, garanta que o tráfego não está sendo afetado por NAT indevido</li>
+	  <li>Sempre documente ASN, neighbors e políticas (facilita troubleshooting)</li>
+    </ul>
+    <div class="callout warn"><strong>Importante</strong> Alguns comandos e comportamentos variam entre versões do FortiOS. Em ambiente crítico, valide a sintaxe no equipamento antes de executar.</div>
+    </div></div>
+  </div>
+</div>
+<div id="s13" class="section exp">
+  <div class="section-header"><div class="section-num">13</div><div class="section-title"><h2>OSPF</h2><div class="pct">Route, Neighbors, Database</div></div><div class="level-tag">Especialista</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-purple"></span>Diagnostico</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">maintenance</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">get router info ospf neighbor</span> </div>
+      <div><span class="p">#</span> <span class="cmd">get router info ospf interface</span></div>
+      <div><span class="p">#</span> <span class="cmd">get router info ospf database</span></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose ip router ospf all</span> </div>
+	
+     
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Boas práticas</div><div class="card-body"><ul class="ref">
+      <li>Garanta consistência de area, network e MTU entre peers</li>
+      <li>Use autenticação quando possível (segurança + estabilidade)</li>
+      <li>Evite flood de LSAs em ambientes grandes → segmentar áreas</li>
+      <li>Sempre valide LSDB (database) quando houver inconsistência</li>
+	  <li>Problemas de vizinhança geralmente estão ligados a:</li>
+	  <li>MTU mismatch</li>
+	  <li>network type errado</li>
+	  <li>timers diferentes</li>
+    </ul>
+    <div class="callout warn"><strong>Importante</strong> Alguns comandos e comportamentos variam entre versões do FortiOS. Em ambiente crítico, valide a sintaxe no equipamento antes de executar.</div>
+    </div></div>
+  </div>
+</div>
+<div id="s14" class="section exp">
+  <div class="section-header"><div class="section-num">14</div><div class="section-title"><h2>SECURITY PROFILES</h2><div class="pct">Web Filter, App control</div></div><div class="level-tag">Especialista</div></div>
+  <div class="grid grid-2">
+    <div class="card"><div class="card-header"><span class="dot dot-purple"></span>Visulização</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">maintenance</span></div><div class="term-body">
+      <div><span class="p">#</span> <span class="cmd">diagnose debug application wad</span> <span class="arg">-1</span></div></div>
+      <div><span class="p">#</span> <span class="cmd">diagnose test application ipsmonitor</span><span class="arg">99</span></div></div>
+      <div><span class="p">#</span> <span class="cmd">show firewall ssl-ssh-profile</span></div>
+      <div><span class="p">#</span> <span class="cmd">show webfilter profile</span> </div>
+	  <div><span class="p">#</span> <span class="cmd">show antivirus profile</span> </div>
+	  <div><span class="p">#</span> <span class="cmd">show application list</span> </div>
+	
+     
+    </div></div></div></div>
+    <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Boas práticas</div><div class="card-body"><ul class="ref">
+      <li>Nunca aplique IPS/SSL Inspection direto em produção sem teste</li>
+      <li>Use flow-based vs proxy-based conscientemente (impacto em performance)</li>
+      <li>SSL Inspection pode quebrar aplicações → sempre validar certificado e exceções</li>
+      <li>Use profiles diferentes por tipo de tráfego (não um genérico pra tudo)</li>
+	  <li>Em caso de problema:desative temporariamente profile para isolar causa</li>
+	  <li>Monitore logs → muitos bloqueios podem indicar falso positivo</li>
+
     </ul>
     <div class="callout warn"><strong>Importante</strong> Alguns comandos e comportamentos variam entre versões do FortiOS. Em ambiente crítico, valide a sintaxe no equipamento antes de executar.</div>
     </div></div>
