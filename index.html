@@ -194,8 +194,11 @@ footer{background:#0d1117;border-top:1px solid var(--border);padding:24px;text-a
       <tr><td>get router info routing-table static</td><td>Apenas rotas estáticas</td></tr>
       <tr><td>get router info routing-table database</td><td>Banco de rotas</td></tr>
       <tr><td>get router info routing-table details &lt;IP&gt;</td><td>Lookup detalhado para destino</td></tr>
+	  <tr><td>get router info routing-table details &lt;IP&gt;</td><td>Lookup detalhado para Origem</td></tr>
+	  <tr><td>get router info routing-table all | grep &lt;IP&gt;</td><td>Ver rotas filtradas/td></tr>
       <tr><td>show router static</td><td>Configuração de rotas estáticas</td></tr>
       <tr><td>show router policy</td><td>Policy routes</td></tr>
+	  
     </tbody></table></div></div></div>
     <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Exemplo de rota estática</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">config router static</span></div><div class="term-body">
       <div><span class="p">#</span> <span class="cmd">config router static</span></div>
@@ -414,11 +417,13 @@ footer{background:#0d1117;border-top:1px solid var(--border);padding:24px;text-a
   <div class="section-header"><div class="section-num">12</div><div class="section-title"><h2>BGP</h2><div class="pct">Route, Neighbors</div></div><div class="level-tag">Especialista</div></div>
   <div class="grid grid-2">
     <div class="card"><div class="card-header"><span class="dot dot-purple"></span>Diagnostico</div><div class="card-body"><div class="term"><div class="term-bar"><span class="dot-close"></span><span class="dot-min"></span><span class="dot-max"></span><span class="term-title">maintenance</span></div><div class="term-body">
-      <div><span class="p">#</span> <span class="cmd">get router info bgp summary</span> </div>
+      <div><span class="p">#</span> <span class="cmd">get router info bgp routes</span> </div>
+	  <div><span class="p">#</span> <span class="cmd">get router info bgp summary</span> </div>
       <div><span class="p">#</span> <span class="cmd">get router info bgp neighbors</span></div>
       <div><span class="p">#</span> <span class="cmd">get router info routing-table bgp</span></div>
       <div><span class="p">#</span> <span class="cmd">diagnose ip router bgp</span> </div>
 	  <div><span class="p">#</span> <span class="cmd">diagnose ip router bgp level info</span> </div>
+		
      
     </div></div></div></div>
     <div class="card"><div class="card-header"><span class="dot dot-orange"></span>Boas práticas</div><div class="card-body"><ul class="ref">
